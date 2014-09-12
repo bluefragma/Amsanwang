@@ -56,9 +56,9 @@
                     </view>
                     <connections>
                         <outlet property="answerField" destination="vBA-vR-5GD" id="m9I-nX-doi"/>
-                        <outlet property="firstNumberLabel" destination="KBJ-Qm-JSe" id="md3-Mz-3A4"/>
+                        <outlet property="leftOperandLabel" destination="KBJ-Qm-JSe" id="HlL-ax-0kg"/>
                         <outlet property="operatorLabel" destination="LUK-BB-IVT" id="ihk-fp-jEU"/>
-                        <outlet property="secondNumberLabel" destination="MZE-sw-aGf" id="eer-M3-hDQ"/>
+                        <outlet property="rightOperandLabel" destination="MZE-sw-aGf" id="QMk-so-0An"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
