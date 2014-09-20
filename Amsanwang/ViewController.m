@@ -9,7 +9,7 @@
 #import "ViewController.h"
 
 // 연산자 열거형.
-typedef NS_ENUM(NSInteger, ASWOperator) {
+typedef NS_ENUM(NSInteger, ASWOperatorState) {
     ASWOperatorAddition,
     ASWOperatorSubtraction,
     ASWOperatorMultiplication,
@@ -28,16 +28,16 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 @property (assign, nonatomic) NSRange operatorRange;
 @property (assign, nonatomic) NSInteger leftOperandValue;
 @property (assign, nonatomic) NSInteger rightOperandValue;
-@property (assign, nonatomic) ASWOperator currentOperator;
+@property (assign, nonatomic) ASWOperatorState currentOperator;
 @property (assign, nonatomic) NSInteger answer;
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator;
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState;
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)integerRandomValueWithRange:(NSRange)range;
-- (NSString *)stringOperator:(ASWOperator)anOperator;
+- (NSString *)stringOperator:(ASWOperatorState)operatorState;
 
 @end
 
@@ -67,7 +67,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.operatorRange = operatorRange;
     
     // 연산자 랜덤 선택.
-    ASWOperator currentOperator = [self integerRandomValueWithRange:operatorRange];;
+    ASWOperatorState currentOperator = [self integerRandomValueWithRange:operatorRange];;
     self.currentOperator = currentOperator;
     
     // 예외 상황.
@@ -85,7 +85,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     }
     
     // 정답을 생성한다.
-    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operator:currentOperator];
+    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operatorState:currentOperator];
     
     // 좌우 라벨에 생성된 난수를 표시한다.
     // NSInteger 값을 NSNumber 리터럴 표현식으로 바꾸고, 다시 문자열 값으로 변경한다.
@@ -119,10 +119,10 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 
 #pragma mark - Private
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState
 {
     NSInteger returnValue;
-    switch (anOperator) {
+    switch (operatorState) {
         case ASWOperatorAddition:
             returnValue = [self additionWithNumber:aNumber otherNumber:otherNumber];
             break;
@@ -176,10 +176,10 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     return returnValue;
 }
 
-- (NSString *)stringOperator:(ASWOperator)anOperator
+- (NSString *)stringOperator:(ASWOperatorState)operatorState
 {
     NSString *returnString;
-    switch (anOperator) {
+    switch (operatorState) {
         case ASWOperatorAddition:
             returnString = kASWOperatorStringAddition;
             break;
