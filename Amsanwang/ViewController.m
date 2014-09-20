@@ -8,12 +8,19 @@
 
 #import "ViewController.h"
 
+// 연산자 열거형.
 typedef NS_ENUM(NSInteger, ASWOperator) {
     ASWOperatorAddition,
     ASWOperatorSubtraction,
     ASWOperatorMultiplication,
     ASWOperatorDivision
 };
+
+// 연산자 기호.
+static NSString * const kASWOperatorStringAddition = @"+";
+static NSString * const kASWOperatorStringSubtraction = @"−";
+static NSString * const kASWOperatorStringMultiplication = @"×";
+static NSString * const kASWOperatorStringDivision = @"÷";
 
 @interface ViewController ()
 
@@ -25,6 +32,7 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSString *)stringOperator:(ASWOperator)anOperator;
 
 @end
 
@@ -52,22 +60,7 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
     
     // 연산자 랜덤 선택.
     self.currentOperator = [self integerRandomValueWithRange:self.operatorRange];
-    switch (self.currentOperator) {
-        case ASWOperatorAddition:
-            self.operatorLabel.text = @"+";
-            break;
-            
-        case ASWOperatorSubtraction:
-            self.operatorLabel.text = @"-";
-            break;
-            
-        case ASWOperatorMultiplication:
-            self.operatorLabel.text = @"*";
-            break;
-            
-        default:
-            break;
-    }
+    self.operatorLabel.text = [self stringOperator:self.currentOperator];
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,6 +123,33 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 {
     int value = aNumber * otherNumber;
     return value;
+}
+
+- (NSString *)stringOperator:(ASWOperator)anOperator
+{
+    NSString *returnString;
+    switch (anOperator) {
+        case ASWOperatorAddition:
+            returnString = kASWOperatorStringAddition;
+            break;
+            
+        case ASWOperatorSubtraction:
+            returnString = kASWOperatorStringSubtraction;
+            break;
+            
+        case ASWOperatorMultiplication:
+            returnString = kASWOperatorStringMultiplication;
+            break;
+            
+        case ASWOperatorDivision:
+            returnString = kASWOperatorStringDivision;
+            break;
+            
+        default:
+            returnString = nil;
+            break;
+    }
+    return returnString;
 }
 
 @end
