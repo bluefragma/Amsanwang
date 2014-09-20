@@ -22,9 +22,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    // 라벨에 난수를 할당한다.
     self.leftOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
     self.rightOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
+    // 위와 같은 내용의 다른 구현.
+    // self.leftOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
+    // self.rightOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,7 +52,8 @@
 
 - (NSInteger)integerRandomValue:(NSInteger)aNumber
 {
-    //TODO: 구현해주세요.
+    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
+    // 0은 계산에서 제외하므로 +1을 한다.
     int value = arc4random_uniform(aNumber)+1;
     return value;
 }
