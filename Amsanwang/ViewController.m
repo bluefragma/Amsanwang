@@ -9,11 +9,11 @@
 #import "ViewController.h"
 
 // 연산자 열거형.
-typedef NS_ENUM(NSInteger, ASWOperator) {
-    ASWOperatorAddition,
-    ASWOperatorSubtraction,
-    ASWOperatorMultiplication,
-    ASWOperatorDivision
+typedef NS_ENUM(NSInteger, ASWOperatorState) {
+    ASWOperatorStateAddition,
+    ASWOperatorStateSubtraction,
+    ASWOperatorStateMultiplication,
+    ASWOperatorStateDivision
 };
 
 // 연산자 기호.
@@ -28,16 +28,16 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 @property (assign, nonatomic) NSRange operatorRange;
 @property (assign, nonatomic) NSInteger leftOperandValue;
 @property (assign, nonatomic) NSInteger rightOperandValue;
-@property (assign, nonatomic) ASWOperator currentOperator;
+@property (assign, nonatomic) ASWOperatorState currentOperator;
 @property (assign, nonatomic) NSInteger answer;
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator;
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState;
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)integerRandomValueWithRange:(NSRange)range;
-- (NSString *)stringOperator:(ASWOperator)anOperator;
+- (NSString *)stringOperator:(ASWOperatorState)operatorState;
 
 @end
 
@@ -67,13 +67,13 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.operatorRange = operatorRange;
     
     // 연산자 랜덤 선택.
-    ASWOperator currentOperator = [self integerRandomValueWithRange:operatorRange];;
+    ASWOperatorState currentOperator = [self integerRandomValueWithRange:operatorRange];;
     self.currentOperator = currentOperator;
     
     // 예외 상황.
     // 숫자 키보드에서 음수 입력이 안되므로, 연산자가 빼기이면 왼쪽 피연산자의 값이 오른쪽 피연산자보다 크거나 같아야 함.
     // 왼쪽 피연산자의 값이 오른쪽 피연산자보다 작으면, 두 수를 바꾼다.
-    if ((currentOperator == ASWOperatorSubtraction) && (leftOperandValue < rightOperandValue)) {
+    if ((currentOperator == ASWOperatorStateSubtraction) && (leftOperandValue < rightOperandValue)) {
         // 전통적인 정수 스왑.
         NSInteger temp = leftOperandValue;
         leftOperandValue = rightOperandValue;
@@ -85,7 +85,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     }
     
     // 정답을 생성한다.
-    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operator:currentOperator];
+    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operatorState:currentOperator];
     
     // 좌우 라벨에 생성된 난수를 표시한다.
     // NSInteger 값을 NSNumber 리터럴 표현식으로 바꾸고, 다시 문자열 값으로 변경한다.
@@ -119,23 +119,23 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 
 #pragma mark - Private
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState
 {
     NSInteger returnValue;
-    switch (anOperator) {
-        case ASWOperatorAddition:
+    switch (operatorState) {
+        case ASWOperatorStateAddition:
             returnValue = [self additionWithNumber:aNumber otherNumber:otherNumber];
             break;
             
-        case ASWOperatorSubtraction:
+        case ASWOperatorStateSubtraction:
             returnValue = [self subtractionWithNumber:aNumber otherNumber:otherNumber];
             break;
             
-        case ASWOperatorMultiplication:
+        case ASWOperatorStateMultiplication:
             returnValue = [self multiplicationWithNumber:aNumber otherNumber:otherNumber];
             break;
             
-        case ASWOperatorDivision:
+        case ASWOperatorStateDivision:
             returnValue = [self divisionWithNumber:aNumber otherNumber:otherNumber];
             break;
             
@@ -176,23 +176,23 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     return returnValue;
 }
 
-- (NSString *)stringOperator:(ASWOperator)anOperator
+- (NSString *)stringOperator:(ASWOperatorState)operatorState
 {
     NSString *returnString;
-    switch (anOperator) {
-        case ASWOperatorAddition:
+    switch (operatorState) {
+        case ASWOperatorStateAddition:
             returnString = kASWOperatorStringAddition;
             break;
             
-        case ASWOperatorSubtraction:
+        case ASWOperatorStateSubtraction:
             returnString = kASWOperatorStringSubtraction;
             break;
             
-        case ASWOperatorMultiplication:
+        case ASWOperatorStateMultiplication:
             returnString = kASWOperatorStringMultiplication;
             break;
             
-        case ASWOperatorDivision:
+        case ASWOperatorStateDivision:
             returnString = kASWOperatorStringDivision;
             break;
             
