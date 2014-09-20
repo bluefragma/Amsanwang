@@ -10,9 +10,13 @@
 
 @interface ViewController ()
 
+- (NSInteger)integerRandomValue:(NSInteger)aNumber;
+
 @end
 
 @implementation ViewController
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad
 {
@@ -36,6 +40,14 @@
         UIAlertView *alerview = [[UIAlertView alloc] initWithTitle:nil message:@"오답입니다" delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil];
         [alerview show];
     }
+}
+
+#pragma mark - Private
+
+- (NSInteger)integerRandomValue:(NSInteger)aNumber
+{
+    //TODO: 구현해주세요.
+    return 0;
 }
 
 @end
