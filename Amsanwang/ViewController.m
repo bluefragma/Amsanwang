@@ -24,13 +24,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    // 라벨에 난수를 할당한다.
+	// Do any additional setup after loading the view, typically from a nib. 
+
     self.leftOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
     self.rightOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
-    // 위와 같은 내용의 다른 구현.
-    // self.leftOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
-    // self.rightOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
 }
 
 - (void)didReceiveMemoryWarning
