@@ -11,6 +11,9 @@
 @interface ViewController ()
 
 - (NSInteger)integerRandomValue:(NSInteger)aNumber;
+- (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 
 @end
 
@@ -34,7 +37,7 @@
 }
 
 - (IBAction)done:(id)sender {
-    int answer = [self.leftOperandLabel.text intValue] + [self.rightOperandLabel.text intValue];
+    int answer = [self additionWithNumber:[self.leftOperandLabel.text intValue] otherNumber:[self.rightOperandLabel.text intValue]];
     if (answer == [self.answerField.text intValue]) {
         UIAlertView *alerview = [[UIAlertView alloc] initWithTitle:nil message:@"정답입니다" delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil];
         [alerview show];
@@ -49,8 +52,27 @@
 
 - (NSInteger)integerRandomValue:(NSInteger)aNumber
 {
-    //TODO: 구현해주세요.
+    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
+    // 0은 계산에서 제외하므로 +1을 한다.
     int value = arc4random_uniform(aNumber)+1;
+    return value;
+}
+
+- (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
+{
+    int value = aNumber + otherNumber;
+    return value;
+}
+
+- (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
+{
+    int value = aNumber - otherNumber;
+    return value;
+}
+
+- (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
+{
+    int value = aNumber * otherNumber;
     return value;
 }
 
