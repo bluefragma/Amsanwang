@@ -50,7 +50,8 @@
 - (NSInteger)integerRandomValue:(NSInteger)aNumber
 {
     //TODO: 구현해주세요.
-    return 0;
+    int value = arc4random_uniform(aNumber)+1;
+    return value;
 }
 
 @end
