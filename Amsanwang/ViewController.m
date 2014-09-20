@@ -70,6 +70,20 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     ASWOperator currentOperator = [self integerRandomValueWithRange:operatorRange];;
     self.currentOperator = currentOperator;
     
+    // 예외 상황.
+    // 숫자 키보드에서 음수 입력이 안되므로, 연산자가 빼기이면 왼쪽 피연산자의 값이 오른쪽 피연산자보다 크거나 같아야 함.
+    // 왼쪽 피연산자의 값이 오른쪽 피연산자보다 작으면, 두 수를 바꾼다.
+    if ((currentOperator == ASWOperatorSubtraction) && (leftOperandValue < rightOperandValue)) {
+        // 전통적인 정수 스왑.
+        NSInteger temp = leftOperandValue;
+        leftOperandValue = rightOperandValue;
+        rightOperandValue = temp;
+        
+        // 프로퍼티를 다시 할당한다.
+        self.leftOperandValue = leftOperandValue;
+        self.rightOperandValue = rightOperandValue;
+    }
+    
     // 정답을 생성한다.
     self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operator:currentOperator];
     
