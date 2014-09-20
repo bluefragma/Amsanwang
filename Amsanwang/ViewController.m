@@ -8,7 +8,16 @@
 
 #import "ViewController.h"
 
+typedef NS_ENUM(NSInteger, ASWOperator) {
+    ASWOperatorAddition,
+    ASWOperatorSubtraction,
+    ASWOperatorMultiplication,
+    ASWOperatorDivision
+};
+
 @interface ViewController ()
+
+@property (assign, nonatomic) ASWOperator currentOperator;
 
 - (NSInteger)integerRandomValue:(NSInteger)aNumber;
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
@@ -31,6 +40,9 @@
     // 위와 같은 내용의 다른 구현.
     // self.leftOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
     // self.rightOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
+    
+    // 연산자 랜덤 선택.
+    self.currentOperator = arc4random_uniform(3);
 }
 
 - (void)didReceiveMemoryWarning
