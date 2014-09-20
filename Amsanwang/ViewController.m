@@ -22,6 +22,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.leftOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
+    self.rightOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
 }
 
 - (void)didReceiveMemoryWarning
