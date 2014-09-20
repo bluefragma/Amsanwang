@@ -32,6 +32,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSString *)stringOperator:(ASWOperator)anOperator;
 
 @end
@@ -109,20 +110,26 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber + otherNumber;
-    return value;
+    NSInteger returnValue = aNumber + otherNumber;
+    return returnValue;
 }
 
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber - otherNumber;
-    return value;
+    NSInteger returnValue = aNumber - otherNumber;
+    return returnValue;
 }
 
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber * otherNumber;
-    return value;
+    NSInteger returnValue = aNumber * otherNumber;
+    return returnValue;
+}
+
+- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
+{
+    NSInteger returnValue = aNumber / otherNumber;
+    return returnValue;
 }
 
 - (NSString *)stringOperator:(ASWOperator)anOperator
