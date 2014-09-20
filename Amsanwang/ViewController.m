@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 
+// 연산자 열거형.
 typedef NS_ENUM(NSInteger, ASWOperator) {
     ASWOperatorAddition,
     ASWOperatorSubtraction,
@@ -15,14 +16,28 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
     ASWOperatorDivision
 };
 
+// 연산자 기호.
+static NSString * const kASWOperatorStringAddition = @"+";
+static NSString * const kASWOperatorStringSubtraction = @"−";
+static NSString * const kASWOperatorStringMultiplication = @"×";
+static NSString * const kASWOperatorStringDivision = @"÷";
+
 @interface ViewController ()
 
+@property (assign, nonatomic) NSRange operandRange;
+@property (assign, nonatomic) NSRange operatorRange;
+@property (assign, nonatomic) NSInteger leftOperandValue;
+@property (assign, nonatomic) NSInteger rightOperandValue;
 @property (assign, nonatomic) ASWOperator currentOperator;
+@property (assign, nonatomic) NSInteger answer;
 
-- (NSInteger)integerRandomValue:(NSInteger)aNumber;
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator;
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
+- (NSInteger)integerRandomValueWithRange:(NSRange)range;
+- (NSString *)stringOperator:(ASWOperator)anOperator;
 
 @end
 
@@ -34,32 +49,51 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    // 라벨에 난수를 할당한다.
-    self.leftOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
-    self.rightOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
     
-    // 위와 같은 내용의 다른 구현.
-    // self.leftOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
-    // self.rightOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
+    // 피연산자 선택 범위.
+    // 첫 번째 인자는 시작 값, 두 번째 인자는 길이.
+    // NSMakeRange(0, 9)는 0부터 8까지를 나타낸다.
+    NSRange operandRange = NSMakeRange(1, 9);
+    self.operandRange = operandRange;
+    
+    // 난수를 생성한다.
+    NSInteger leftOperandValue = [self integerRandomValueWithRange:operandRange];
+    NSInteger rightOperandValue = [self integerRandomValueWithRange:operandRange];
+    self.leftOperandValue = leftOperandValue;
+    self.rightOperandValue = rightOperandValue;
+    
+    // 연산자 선택 범위.
+    NSRange operatorRange = NSMakeRange(0, 3);
+    self.operatorRange = operatorRange;
     
     // 연산자 랜덤 선택.
-    self.currentOperator = arc4random_uniform(3);
-    switch (self.currentOperator) {
-        case ASWOperatorAddition:
-            self.operatorLabel.text = @"+";
-            break;
-            
-        case ASWOperatorSubtraction:
-            self.operatorLabel.text = @"-";
-            break;
-            
-        case ASWOperatorMultiplication:
-            self.operatorLabel.text = @"*";
-            break;
-            
-        default:
-            break;
+    ASWOperator currentOperator = [self integerRandomValueWithRange:operatorRange];;
+    self.currentOperator = currentOperator;
+    
+    // 예외 상황.
+    // 숫자 키보드에서 음수 입력이 안되므로, 연산자가 빼기이면 왼쪽 피연산자의 값이 오른쪽 피연산자보다 크거나 같아야 함.
+    // 왼쪽 피연산자의 값이 오른쪽 피연산자보다 작으면, 두 수를 바꾼다.
+    if ((currentOperator == ASWOperatorSubtraction) && (leftOperandValue < rightOperandValue)) {
+        // 전통적인 정수 스왑.
+        NSInteger temp = leftOperandValue;
+        leftOperandValue = rightOperandValue;
+        rightOperandValue = temp;
+        
+        // 프로퍼티를 다시 할당한다.
+        self.leftOperandValue = leftOperandValue;
+        self.rightOperandValue = rightOperandValue;
     }
+    
+    // 정답을 생성한다.
+    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operator:currentOperator];
+    
+    // 좌우 라벨에 생성된 난수를 표시한다.
+    // NSInteger 값을 NSNumber 리터럴 표현식으로 바꾸고, 다시 문자열 값으로 변경한다.
+    self.leftOperandLabel.text = [@(leftOperandValue) stringValue];
+    self.rightOperandLabel.text = [@(rightOperandValue) stringValue];
+    
+    // 연산자 라벨에 연산자 기호를 표시한다.
+    self.operatorLabel.text = [self stringOperator:currentOperator];
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,26 +102,12 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)done:(id)sender {
-    NSInteger answer;
-    switch (self.currentOperator) {
-        case ASWOperatorAddition:
-            answer = [self additionWithNumber:[self.leftOperandLabel.text intValue] otherNumber:[self.rightOperandLabel.text intValue]];
-            break;
-            
-        case ASWOperatorSubtraction:
-            answer = [self subtractionWithNumber:[self.leftOperandLabel.text intValue] otherNumber:[self.rightOperandLabel.text intValue]];
-            break;
-            
-        case ASWOperatorMultiplication:
-            answer = [self multiplicationWithNumber:[self.leftOperandLabel.text intValue] otherNumber:[self.rightOperandLabel.text intValue]];
-            break;
-            
-        default:
-            break;
-    }
-    
-    if (answer == [self.answerField.text intValue]) {
+#pragma mark - Actions
+
+- (IBAction)done:(id)sender
+{
+    NSInteger answer = self.answer;
+    if (answer == [self.answerField.text integerValue]) {
         UIAlertView *alerview = [[UIAlertView alloc] initWithTitle:nil message:@"정답입니다" delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil];
         [alerview show];
     }
@@ -99,30 +119,88 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 
 #pragma mark - Private
 
-- (NSInteger)integerRandomValue:(NSInteger)aNumber
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operator:(ASWOperator)anOperator
 {
-    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
-    // 0은 계산에서 제외하므로 +1을 한다.
-    int value = arc4random_uniform(aNumber)+1;
-    return value;
+    NSInteger returnValue;
+    switch (anOperator) {
+        case ASWOperatorAddition:
+            returnValue = [self additionWithNumber:aNumber otherNumber:otherNumber];
+            break;
+            
+        case ASWOperatorSubtraction:
+            returnValue = [self subtractionWithNumber:aNumber otherNumber:otherNumber];
+            break;
+            
+        case ASWOperatorMultiplication:
+            returnValue = [self multiplicationWithNumber:aNumber otherNumber:otherNumber];
+            break;
+            
+        case ASWOperatorDivision:
+            returnValue = [self divisionWithNumber:aNumber otherNumber:otherNumber];
+            break;
+            
+        default:
+            break;
+    }
+    return returnValue;
 }
 
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber + otherNumber;
-    return value;
+    NSInteger returnValue = aNumber + otherNumber;
+    return returnValue;
 }
 
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber - otherNumber;
-    return value;
+    NSInteger returnValue = aNumber - otherNumber;
+    return returnValue;
 }
 
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
 {
-    int value = aNumber * otherNumber;
-    return value;
+    NSInteger returnValue = aNumber * otherNumber;
+    return returnValue;
+}
+
+- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
+{
+    NSInteger returnValue = aNumber / otherNumber;
+    return returnValue;
+}
+
+- (NSInteger)integerRandomValueWithRange:(NSRange)range
+{
+    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
+    NSInteger returnValue = arc4random_uniform(range.length) + range.location;
+    return returnValue;
+}
+
+- (NSString *)stringOperator:(ASWOperator)anOperator
+{
+    NSString *returnString;
+    switch (anOperator) {
+        case ASWOperatorAddition:
+            returnString = kASWOperatorStringAddition;
+            break;
+            
+        case ASWOperatorSubtraction:
+            returnString = kASWOperatorStringSubtraction;
+            break;
+            
+        case ASWOperatorMultiplication:
+            returnString = kASWOperatorStringMultiplication;
+            break;
+            
+        case ASWOperatorDivision:
+            returnString = kASWOperatorStringDivision;
+            break;
+            
+        default:
+            returnString = nil;
+            break;
+    }
+    return returnString;
 }
 
 @end
