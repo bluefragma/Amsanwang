@@ -28,7 +28,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 @property (assign, nonatomic) NSRange operatorRange;
 @property (assign, nonatomic) NSInteger leftOperandValue;
 @property (assign, nonatomic) NSInteger rightOperandValue;
-@property (assign, nonatomic) ASWOperatorState currentOperator;
+@property (assign, nonatomic) ASWOperatorState operatorState;
 @property (assign, nonatomic) NSInteger answer;
 
 - (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState;
@@ -67,13 +67,13 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.operatorRange = operatorRange;
     
     // 연산자 랜덤 선택.
-    ASWOperatorState currentOperator = [self integerRandomValueWithRange:operatorRange];;
-    self.currentOperator = currentOperator;
+    ASWOperatorState operatorState = [self integerRandomValueWithRange:operatorRange];;
+    self.operatorState = operatorState;
     
     // 예외 상황.
     // 숫자 키보드에서 음수 입력이 안되므로, 연산자가 빼기이면 왼쪽 피연산자의 값이 오른쪽 피연산자보다 크거나 같아야 함.
     // 왼쪽 피연산자의 값이 오른쪽 피연산자보다 작으면, 두 수를 바꾼다.
-    if ((currentOperator == ASWOperatorStateSubtraction) && (leftOperandValue < rightOperandValue)) {
+    if ((operatorState == ASWOperatorStateSubtraction) && (leftOperandValue < rightOperandValue)) {
         // 전통적인 정수 스왑.
         NSInteger temp = leftOperandValue;
         leftOperandValue = rightOperandValue;
@@ -85,7 +85,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     }
     
     // 정답을 생성한다.
-    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operatorState:currentOperator];
+    self.answer = [self calculateWithNumber:leftOperandValue otherNumber:rightOperandValue operatorState:operatorState];
     
     // 좌우 라벨에 생성된 난수를 표시한다.
     // NSInteger 값을 NSNumber 리터럴 표현식으로 바꾸고, 다시 문자열 값으로 변경한다.
@@ -93,7 +93,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.rightOperandLabel.text = [@(rightOperandValue) stringValue];
     
     // 연산자 라벨에 연산자 기호를 표시한다.
-    self.operatorLabel.text = [self stringOperator:currentOperator];
+    self.operatorLabel.text = [self stringOperator:operatorState];
 }
 
 - (void)didReceiveMemoryWarning
