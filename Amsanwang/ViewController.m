@@ -18,8 +18,10 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 @interface ViewController ()
 
 @property (assign, nonatomic) ASWOperator currentOperator;
+@property (assign, nonatomic) NSRange operandRange;
+@property (assign, nonatomic) NSRange operatorRange;
 
-- (NSInteger)integerRandomValue:(NSInteger)aNumber;
+- (NSInteger)integerRandomValueWithRange:(NSRange)range;
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
@@ -34,16 +36,22 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    // 라벨에 난수를 할당한다.
-    self.leftOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
-    self.rightOperandLabel.text = [NSString stringWithFormat:@"%d", [self integerRandomValue:9]];
     
-    // 위와 같은 내용의 다른 구현.
-    // self.leftOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
-    // self.rightOperandLabel.text = [@([self integerRandomValue:9]) stringValue];
+    // 피연산자 선택 범위.
+    // 첫 번째 인자는 시작 값, 두 번째 인자는 길이.
+    // NSMakeRange(0, 9)는 0부터 8까지를 나타낸다.
+    self.operandRange = NSMakeRange(1, 9);
+    
+    // 좌우 라벨에 난수를 할당한다.
+    // NSInteger 값을 NSNumber 리터럴 표현식으로 바꾸고, 다시 문자열 값으로 변경한다.
+    self.leftOperandLabel.text = [@([self integerRandomValueWithRange:self.operandRange]) stringValue];
+    self.rightOperandLabel.text = [@([self integerRandomValueWithRange:self.operandRange]) stringValue];
+    
+    // 연산자 선택 범위.
+    self.operatorRange = NSMakeRange(0, 3);
     
     // 연산자 랜덤 선택.
-    self.currentOperator = arc4random_uniform(3);
+    self.currentOperator = [self integerRandomValueWithRange:self.operatorRange];
     switch (self.currentOperator) {
         case ASWOperatorAddition:
             self.operatorLabel.text = @"+";
@@ -99,12 +107,11 @@ typedef NS_ENUM(NSInteger, ASWOperator) {
 
 #pragma mark - Private
 
-- (NSInteger)integerRandomValue:(NSInteger)aNumber
+- (NSInteger)integerRandomValueWithRange:(NSRange)range
 {
     // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
-    // 0은 계산에서 제외하므로 +1을 한다.
-    int value = arc4random_uniform(aNumber)+1;
-    return value;
+    NSInteger returnValue = arc4random_uniform(range.length) + range.location;
+    return returnValue;
 }
 
 - (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
