@@ -42,13 +42,13 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     // 난수를 생성한다.
     u_int32_t from = 1;
     u_int32_t to = 9;
-    NSInteger leftOperandValue = [self integerRandomValueFrom:from to:to];
-    NSInteger rightOperandValue = [self integerRandomValueFrom:from to:to];
+    NSInteger leftOperandValue = [self integerRandomNumberFrom:from to:to];
+    NSInteger rightOperandValue = [self integerRandomNumberFrom:from to:to];
     self.leftOperandValue = leftOperandValue;
     self.rightOperandValue = rightOperandValue;
     
     // 연산자 랜덤 선택.
-    ASWOperatorState operatorState = [self integerRandomValueFrom:ASWOperatorStateAddition to:ASWOperatorStateMultiplication];
+    ASWOperatorState operatorState = [self integerRandomNumberFrom:ASWOperatorStateAddition to:ASWOperatorStateMultiplication];
     self.operatorState = operatorState;
     
     // 예외 상황.
@@ -74,7 +74,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.rightOperandLabel.text = [@(rightOperandValue) stringValue];
     
     // 연산자 라벨에 연산자 기호를 표시한다.
-    self.operatorLabel.text = [self operatorSign:operatorState];
+    self.operatorLabel.text = [self operatorSignWithState:operatorState];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,13 +107,13 @@ static NSString * const kASWOperatorStringDivision = @"÷";
  @code
  u_int32_t from = 1;
  u_int32_t to = 9;
- NSInteger randomNumber = [self integerRandomValueFrom:from to:to];
+ NSInteger randomNumber = [self integerRandomNumberFrom:from to:to];
  @endcode
  
  @param from 범위의 시작.
  @param to 범위의 끝.
  */
-- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to {
+- (NSInteger)integerRandomNumberFrom:(u_int32_t)from to:(u_int32_t)to {
     u_int32_t number = to - from + 1;
     // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
     NSInteger returnValue = arc4random_uniform(number) + from;
@@ -224,12 +224,12 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 /*! 연산자 상태에 해당하는 연산자 기호를 구한다.
  Example usage:
  @code
- NSString *operatorSign = [self operatorSign:ASWOperatorStateAddition];
+ NSString *operatorSign = [self operatorSignWithState:ASWOperatorStateAddition];
  @endcode
  
  @param operatorState 연산자 상태.
  */
-- (NSString *)operatorSign:(ASWOperatorState)operatorState {
+- (NSString *)operatorSignWithState:(ASWOperatorState)operatorState {
     NSString *returnString;
     switch (operatorState) {
         case ASWOperatorStateAddition:
