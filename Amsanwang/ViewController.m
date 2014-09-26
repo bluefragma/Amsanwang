@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-// 연산자 열거형.
+// 연산자 상태 열거형.
 typedef NS_ENUM(NSInteger, ASWOperatorState) {
     ASWOperatorStateAddition,
     ASWOperatorStateSubtraction,
@@ -29,22 +29,13 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 @property (assign, nonatomic) ASWOperatorState operatorState;
 @property (assign, nonatomic) NSInteger answer;
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState;
-- (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
-- (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
-- (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
-- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
-- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to;
-- (NSString *)stringOperator:(ASWOperatorState)operatorState;
-
 @end
 
 @implementation ViewController
 
 #pragma mark - Lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
@@ -83,19 +74,21 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     self.rightOperandLabel.text = [@(rightOperandValue) stringValue];
     
     // 연산자 라벨에 연산자 기호를 표시한다.
-    self.operatorLabel.text = [self stringOperator:operatorState];
+    self.operatorLabel.text = [self operatorSign:operatorState];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Actions
 
-- (IBAction)done:(id)sender
-{
+/*! 입력된 값을 정답과 비교하여 정답 여부를 표시한다.
+ 
+ @param sender 이 액션을 보낸 객체.
+ */
+- (IBAction)done:(id)sender {
     NSInteger answer = self.answer;
     if (answer == [self.answerField.text integerValue]) {
         UIAlertView *alerview = [[UIAlertView alloc] initWithTitle:nil message:@"정답입니다" delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil];
@@ -109,8 +102,101 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 
 #pragma mark - Private
 
-- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState
-{
+/*! 지정된 범위의 정수형 난수를 생성한다.
+ Example usage:
+ @code
+ u_int32_t from = 1;
+ u_int32_t to = 9;
+ NSInteger randomNumber = [self integerRandomValueFrom:from to:to];
+ @endcode
+ 
+ @param from 범위의 시작.
+ @param to 범위의 끝.
+ */
+- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to {
+    u_int32_t number = to - from + 1;
+    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
+    NSInteger returnValue = arc4random_uniform(number) + from;
+    return returnValue;
+}
+
+/*! 두 숫자를 더한다.
+ Example usage:
+ @code
+ NSInteger aNumber = 1;
+ NSInteger otherNumber = 2;
+ NSInteger result = [self additionWithNumber:aNumber otherNumber:otherNumber];
+ @endcode
+ 
+ @param aNumber 한 숫자.
+ @param otherNumber 다른 숫자.
+ */
+- (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber {
+    NSInteger returnValue = aNumber + otherNumber;
+    return returnValue;
+}
+
+/*! 한 숫자에서 다른 숫자를 뺀다.
+ Example usage:
+ @code
+ NSInteger aNumber = 2;
+ NSInteger otherNumber = 1;
+ NSInteger result = [self subtractionWithNumber:aNumber otherNumber:otherNumber];
+ @endcode
+ 
+ @param aNumber 한 숫자.
+ @param otherNumber 다른 숫자.
+ */
+- (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber {
+    NSInteger returnValue = aNumber - otherNumber;
+    return returnValue;
+}
+
+/*! 두 숫자를 곱한다.
+ Example usage:
+ @code
+ NSInteger aNumber = 2;
+ NSInteger otherNumber = 2;
+ NSInteger result = [self multiplicationWithNumber:aNumber otherNumber:otherNumber];
+ @endcode
+ 
+ @param aNumber 한 숫자.
+ @param otherNumber 다른 숫자.
+ */
+- (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber {
+    NSInteger returnValue = aNumber * otherNumber;
+    return returnValue;
+}
+
+/*! 한 숫자를 다른 숫자로 나눈다.
+ Example usage:
+ @code
+ NSInteger aNumber = 4;
+ NSInteger otherNumber = 2;
+ NSInteger result = [self divisionWithNumber:aNumber otherNumber:otherNumber];
+ @endcode
+ 
+ @param aNumber 한 숫자.
+ @param otherNumber 다른 숫자.
+ */
+- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber {
+    NSInteger returnValue = aNumber / otherNumber;
+    return returnValue;
+}
+
+/*! 두 숫자를 연산자 상태에 따라 계산한다.
+ Example usage:
+ @code
+ NSInteger aNumber = 4;
+ NSInteger otherNumber = 2;
+ NSInteger result = [self calculateWithNumber:aNumber otherNumber:otherNumber operatorState:ASWOperatorStateAddition];
+ @endcode
+ 
+ @param aNumber 한 숫자.
+ @param otherNumber 다른 숫자.
+ @param operatorState 연산자 상태.
+ */
+- (NSInteger)calculateWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber operatorState:(ASWOperatorState)operatorState {
     NSInteger returnValue;
     switch (operatorState) {
         case ASWOperatorStateAddition:
@@ -135,40 +221,15 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     return returnValue;
 }
 
-- (NSInteger)additionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
-{
-    NSInteger returnValue = aNumber + otherNumber;
-    return returnValue;
-}
-
-- (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
-{
-    NSInteger returnValue = aNumber - otherNumber;
-    return returnValue;
-}
-
-- (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
-{
-    NSInteger returnValue = aNumber * otherNumber;
-    return returnValue;
-}
-
-- (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber
-{
-    NSInteger returnValue = aNumber / otherNumber;
-    return returnValue;
-}
-
-- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to
-{
-    u_int32_t number = to - from + 1;
-    // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
-    NSInteger returnValue = arc4random_uniform(number) + from;
-    return returnValue;
-}
-
-- (NSString *)stringOperator:(ASWOperatorState)operatorState
-{
+/*! 연산자 상태에 해당하는 연산자 기호를 구한다.
+ Example usage:
+ @code
+ NSString *operatorSign = [self operatorSign:ASWOperatorStateAddition];
+ @endcode
+ 
+ @param operatorState 연산자 상태.
+ */
+- (NSString *)operatorSign:(ASWOperatorState)operatorState {
     NSString *returnString;
     switch (operatorState) {
         case ASWOperatorStateAddition:
