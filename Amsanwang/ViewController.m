@@ -24,8 +24,6 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 
 @interface ViewController ()
 
-@property (assign, nonatomic) NSRange operandRange;
-@property (assign, nonatomic) NSRange operatorRange;
 @property (assign, nonatomic) NSInteger leftOperandValue;
 @property (assign, nonatomic) NSInteger rightOperandValue;
 @property (assign, nonatomic) ASWOperatorState operatorState;
@@ -36,7 +34,7 @@ static NSString * const kASWOperatorStringDivision = @"÷";
 - (NSInteger)subtractionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)multiplicationWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
 - (NSInteger)divisionWithNumber:(NSInteger)aNumber otherNumber:(NSInteger)otherNumber;
-- (NSInteger)integerRandomValueWithRange:(NSRange)range;
+- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to;
 - (NSString *)stringOperator:(ASWOperatorState)operatorState;
 
 @end
@@ -50,24 +48,16 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    // 피연산자 선택 범위.
-    // 첫 번째 인자는 시작 값, 두 번째 인자는 길이.
-    // NSMakeRange(0, 9)는 0부터 8까지를 나타낸다.
-    NSRange operandRange = NSMakeRange(1, 9);
-    self.operandRange = operandRange;
-    
     // 난수를 생성한다.
-    NSInteger leftOperandValue = [self integerRandomValueWithRange:operandRange];
-    NSInteger rightOperandValue = [self integerRandomValueWithRange:operandRange];
+    u_int32_t from = 1;
+    u_int32_t to = 9;
+    NSInteger leftOperandValue = [self integerRandomValueFrom:from to:to];
+    NSInteger rightOperandValue = [self integerRandomValueFrom:from to:to];
     self.leftOperandValue = leftOperandValue;
     self.rightOperandValue = rightOperandValue;
     
-    // 연산자 선택 범위.
-    NSRange operatorRange = NSMakeRange(0, 3);
-    self.operatorRange = operatorRange;
-    
     // 연산자 랜덤 선택.
-    ASWOperatorState operatorState = [self integerRandomValueWithRange:operatorRange];;
+    ASWOperatorState operatorState = [self integerRandomValueFrom:ASWOperatorStateAddition to:ASWOperatorStateMultiplication];
     self.operatorState = operatorState;
     
     // 예외 상황.
@@ -169,10 +159,11 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     return returnValue;
 }
 
-- (NSInteger)integerRandomValueWithRange:(NSRange)range
+- (NSInteger)integerRandomValueFrom:(u_int32_t)from to:(u_int32_t)to
 {
+    u_int32_t number = to - from + 1;
     // arc4random_uniform(N) 함수는 0 에서 N-1 까지의 정수 난수를 생성한다.
-    NSInteger returnValue = arc4random_uniform(range.length) + range.location;
+    NSInteger returnValue = arc4random_uniform(number) + from;
     return returnValue;
 }
 
