@@ -75,6 +75,8 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     
     // 연산자 라벨에 연산자 기호를 표시한다.
     self.operatorLabel.text = [self operatorSignWithState:operatorState];
+    
+    [self.answerField becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
