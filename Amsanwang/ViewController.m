@@ -257,4 +257,12 @@ static NSString * const kASWOperatorStringDivision = @"÷";
     return returnString;
 }
 
+
+
+/*! 초를 카운트하는 타이머 함수
+ */
+- (NSInteger)timerOperator:(u_int32_t)secondNumber {
+    return 1;
+}
+
 @end
