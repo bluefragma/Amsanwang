@@ -21,6 +21,7 @@
 		A10A5D45199EF5B800EBD572 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10A5D27199EF5B800EBD572 /* UIKit.framework */; };
 		A10A5D4D199EF5B800EBD572 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A10A5D4B199EF5B800EBD572 /* InfoPlist.strings */; };
 		A10A5D4F199EF5B800EBD572 /* AmsanwangTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A10A5D4E199EF5B800EBD572 /* AmsanwangTests.m */; };
+		A18177C519D65403009A38E4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A18177C419D65403009A38E4 /* RootViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		A10A5D4A199EF5B800EBD572 /* AmsanwangTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AmsanwangTests-Info.plist"; sourceTree = "<group>"; };
 		A10A5D4C199EF5B800EBD572 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A10A5D4E199EF5B800EBD572 /* AmsanwangTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AmsanwangTests.m; sourceTree = "<group>"; };
+		A18177C319D65403009A38E4 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		A18177C419D65403009A38E4 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				A10A5D32199EF5B800EBD572 /* AppDelegate.h */,
 				A10A5D33199EF5B800EBD572 /* AppDelegate.m */,
 				A10A5D35199EF5B800EBD572 /* Main.storyboard */,
+				A18177C319D65403009A38E4 /* RootViewController.h */,
+				A18177C419D65403009A38E4 /* RootViewController.m */,
 				A10A5D38199EF5B800EBD572 /* ViewController.h */,
 				A10A5D39199EF5B800EBD572 /* ViewController.m */,
 				A10A5D3B199EF5B800EBD572 /* Images.xcassets */,
@@ -250,6 +255,7 @@
 			files = (
 				A10A5D3A199EF5B800EBD572 /* ViewController.m in Sources */,
 				A10A5D34199EF5B800EBD572 /* AppDelegate.m in Sources */,
+				A18177C519D65403009A38E4 /* RootViewController.m in Sources */,
 				A10A5D30199EF5B800EBD572 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,6 +461,7 @@
 				A10A5D54199EF5B800EBD572 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A10A5D55199EF5B800EBD572 /* Build configuration list for PBXNativeTarget "AmsanwangTests" */ = {
 			isa = XCConfigurationList;
@@ -463,6 +470,7 @@
 				A10A5D57199EF5B800EBD572 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
